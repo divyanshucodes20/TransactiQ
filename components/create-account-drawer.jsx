@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {zodResolver} from "@hookform/resolvers/zod";
 import {
     Drawer,
@@ -22,6 +22,10 @@ import { accountSchema } from '@/app/lib/schema';
 import { Input } from './ui/input';
 import { Switch } from './ui/switch';
 import { Button } from './ui/button';
+import useFetch from '@/hooks/use-fetch';
+import { createAccount } from '@/actions/dashboard';
+import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 const CreateAccountDrawer = ({children}) => {
     const [open,setOpen]=useState(false);
@@ -36,6 +40,22 @@ setValue,watch,reset
             isDefault:false,
         }
     })
+    const {data:newAccount,error,fn:createAccountFn,loading:createAccountLoading}=useFetch(createAccount);
+ 
+     useEffect(() => {
+       if(newAccount && !createAccountLoading){
+        toast.success("Account created successfully");
+         reset();
+         setOpen(false);
+       }
+     },[newAccount,createAccountLoading])
+
+     useEffect(() => {
+      if(error){
+        toast.error(error.message||"Failed to create account");
+      }
+     }, [error])
+
     const onSubmit = async (data) => {
         await createAccountFn(data);
       };
