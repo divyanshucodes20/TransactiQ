@@ -1,8 +1,9 @@
 import { Suspense } from "react";
+import { getAccountWithTransactions } from "@/actions/account";
 import { BarLoader } from "react-spinners";
+import { TransactionTable } from "../_components/transaction-table";
 import { notFound } from "next/navigation";
-import { getAccountWithTransactions } from "@/actions/accounts";
-import TransactionTable from "../_components/transaction-table";
+
 
 export default async function AccountPage({ params }) {
   const accountData = await getAccountWithTransactions(params.id);

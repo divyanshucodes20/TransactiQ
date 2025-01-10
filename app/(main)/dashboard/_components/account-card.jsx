@@ -13,7 +13,7 @@ import {
   import Link from "next/link";
   import { toast } from "sonner";
 import useFetch from '@/hooks/use-fetch';
-import { updateDefaultAccount } from '@/actions/accounts';
+import { updateDefaultAccount } from '@/actions/account';
 
 
 const AccountCard = ({account}) => {
