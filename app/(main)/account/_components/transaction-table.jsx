@@ -13,7 +13,7 @@ import {
   RefreshCw,
   Clock,
 } from "lucide-react";
-import { format } from "date-fns";
+import { format} from "date-fns";
 import { toast } from "sonner";
 
 import {
@@ -176,6 +176,7 @@ export function TransactionTable({ transactions }) {
       return;
 
     deleteFn(selectedIds);
+    setSelectedIds([]);
   };
 
   useEffect(() => {

@@ -69,11 +69,10 @@ export async function bulkDeleteTransactions(transactionIds) {
 
     // Group transactions by account to update balances
     const accountBalanceChanges = transactions.reduce((acc, transaction) => {
+      const amount = parseFloat(transaction.amount); // Convert amount to float
       const change =
-        transaction.type === "EXPENSE"
-          ? transaction.amount
-          : -transaction.amount;
-      acc[transaction.accountId] = (acc[transaction.accountId] || 0) + change;
+        transaction.type === "EXPENSE" ? amount : -amount; // Handle balance changes based on transaction type
+      acc[transaction.accountId] = (acc[transaction.accountId] || 0) + change; // Update account balance
       return acc;
     }, {});
 
@@ -88,20 +87,19 @@ export async function bulkDeleteTransactions(transactionIds) {
       });
 
       // Update account balances
-      for (const [accountId, balanceChange] of Object.entries(
-        accountBalanceChanges
-      )) {
+      for (const [accountId, balanceChange] of Object.entries(accountBalanceChanges)) {
         await tx.account.update({
           where: { id: accountId },
           data: {
             balance: {
-              increment: balanceChange,
+              increment: balanceChange, // Increment/decrement balance based on change
             },
           },
         });
       }
     });
 
+    // Revalidate paths after changes
     revalidatePath("/dashboard");
     revalidatePath("/account/[id]");
 
@@ -110,6 +108,7 @@ export async function bulkDeleteTransactions(transactionIds) {
     return { success: false, error: error.message };
   }
 }
+
 
 export async function updateDefaultAccount(accountId) {
   try {
