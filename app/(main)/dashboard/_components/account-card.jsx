@@ -1,8 +1,7 @@
 "use client";
-import React, { use, useEffect } from 'react'
-import { ArrowUpRight, ArrowDownRight, CreditCard, Trash2 } from "lucide-react";
+import React, { useEffect } from 'react'
+import { ArrowUpRight, ArrowDownRight, Trash2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
 import {
     Card,
     CardContent,
@@ -17,7 +16,7 @@ import { updateDefaultAccount } from '@/actions/account';
 import { deleteAccount } from '@/actions/dashboard';
 
 
-const AccountCard = ({account}) => {
+export function AccountCard ({account}){
     const {name,type,balance,id,isDefault}=account;
     const {
         loading:updateDefaultLoading,
@@ -113,5 +112,3 @@ const AccountCard = ({account}) => {
   </Card> 
   )
 }
-
-export default AccountCard
