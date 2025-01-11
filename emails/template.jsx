@@ -90,7 +90,7 @@ import {
                     ([category, amount]) => (
                       <div key={category} style={styles.row}>
                         <Text style={styles.text}>{category}</Text>
-                        <Text style={styles.text}>${amount}</Text>
+                        <Text style={styles.text}>₹{amount}</Text>
                       </div>
                     )
                   )}
@@ -100,7 +100,7 @@ import {
               {/* AI Insights */}
               {data?.insights && (
                 <Section style={styles.section}>
-                  <Heading style={styles.heading}>Welth Insights</Heading>
+                  <Heading style={styles.heading}>TransactIQ Insights</Heading>
                   {data.insights.map((insight, index) => (
                     <Text key={index} style={styles.text}>
                       • {insight}
@@ -110,7 +110,7 @@ import {
               )}
   
               <Text style={styles.footer}>
-                Thank you for using Welth. Keep tracking your finances for better
+                Thank you for using Us. Keep tracking your finances for better
                 financial health!
               </Text>
             </Container>
