@@ -8,7 +8,7 @@ import { getCurrentBudget } from '@/actions/budget'
 import { BudgetProgress } from './_components/buget-progress'
 import { DashboardOverview } from './_components/transaction-overview'
 
-async function DashboardPage(){
+export async function DashboardPage(){
   const [accounts, transactions] = await Promise.all([
     getUserAccounts(),
     getDashboardData(),
@@ -55,4 +55,3 @@ async function DashboardPage(){
   );
 }
 
-export default DashboardPage
