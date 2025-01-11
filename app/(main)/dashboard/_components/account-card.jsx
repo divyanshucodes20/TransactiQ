@@ -1,6 +1,6 @@
 "use client";
 import React, { use, useEffect } from 'react'
-import { ArrowUpRight, ArrowDownRight, CreditCard } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, CreditCard, Trash2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,6 +14,7 @@ import {
   import { toast } from "sonner";
 import useFetch from '@/hooks/use-fetch';
 import { updateDefaultAccount } from '@/actions/account';
+import { deleteAccount } from '@/actions/dashboard';
 
 
 const AccountCard = ({account}) => {
@@ -24,6 +25,22 @@ const AccountCard = ({account}) => {
         data:updatedAccount,
         error,
     }=useFetch(updateDefaultAccount);
+  
+    const {
+        loading:deleteAccountLoading,
+        fn:deleteAccountFn,
+        data:DeleteAccount,
+        error:deleteError,
+    }=useFetch(deleteAccount);
+
+    const handleDeleteAccount=async(e)=>{
+        e.preventDefault();
+        if(isDefault){
+            toast.error("Make another account default before deleting this account");
+            return;
+        }
+        await deleteAccountFn(id);
+    }
 
     const handleDefaultChange=async(e)=>{
         e.preventDefault();
@@ -33,6 +50,18 @@ const AccountCard = ({account}) => {
         }
         await handleDefaultFn(id);    
     };
+    useEffect(()=>{
+      if(DeleteAccount?.success){
+          toast.success("Account deleted successfully");
+      }
+  },[DeleteAccount,deleteAccountLoading]);
+
+  useEffect(()=>{
+      if(deleteError){
+          toast.error(error.message||"Failed to update default account");
+      }
+  },[deleteError]);
+
 
     useEffect(()=>{
         if(updatedAccount?.success){
@@ -60,8 +89,11 @@ const AccountCard = ({account}) => {
         />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">
+        <div className="text-2xl font-bold flex justify-between items-center">
         ₹{parseFloat(balance).toFixed(2)}
+        <Trash2 className='hover:bg-rose-500' onClick={handleDeleteAccount}
+        disabled={deleteAccountLoading}
+        />
         </div>
         <p className="text-xs text-muted-foreground">
           {type.charAt(0) + type.slice(1).toLowerCase()} Account

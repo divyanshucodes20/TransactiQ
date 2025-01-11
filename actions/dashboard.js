@@ -103,3 +103,37 @@ export async function getDashbaordData() {
     });
     return transactions.map(serializeTransaction);
 }
+
+export async function deleteAccount(accountId){
+try {
+    const {userId}=await auth();
+    if(!userId){
+        throw new Error("Unauthorized");
+    }
+    const user=await db.user.findUnique({
+        where:{clerkUserId:userId},
+    });
+    if(!user){
+        throw new Error("User not found");
+    }
+    const account=await db.account.findUnique({
+        where:{
+            id:accountId,
+            userId:user.id,
+        },
+    });
+    if(!account){
+        throw new Error("Account not found");
+    }
+    if(account.isDefault){
+        throw new Error("First Make Any Other Account Default To Delete This Account");
+    }
+    await db.account.delete({
+        where:{id:accountId},
+    });
+    revalidatePath("/dashboard");
+    return {success:true};
+} catch (error) {
+    throw new Error(error.message);
+}
+}
