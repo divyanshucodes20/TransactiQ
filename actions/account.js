@@ -96,12 +96,12 @@ export async function bulkDeleteTransactions(transactionIds) {
             },
           },
         });
+        revalidatePath(`/account/${accountId}`, { type: "route" });
       }
     });
 
     // Revalidate paths after changes
     revalidatePath("/dashboard");
-    revalidatePath("/account/[id]");
 
     return { success: true };
   } catch (error) {
